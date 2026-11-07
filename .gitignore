@@ -1,9 +1,10 @@
 # macOS
 .DS_Store
 
-# Anciens scripts de déploiement local (contiennent le mot de passe VM) — jamais sur GitHub
-deploy.exp
-deploy.sh
+# Anciens scripts de déploiement local À LA RACINE (contiennent le mot de passe VM) — jamais sur GitHub
+# (motifs ancrés avec / pour ne PAS exclure deploy/deploy.sh)
+/deploy.exp
+/deploy.sh
 
 # Sources lourdes / redondantes gardées en local uniquement
 CV Louis Dalet.pdf.pdf
