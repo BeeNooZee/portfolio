@@ -137,10 +137,13 @@
   .project .priv { font-size: .85rem; color: var(--faint); font-weight: 500; }
 
   /* Homelab */
-  .lab { display: grid; grid-template-columns: 1fr 1.05fr; gap: 64px; align-items: center; }
+  .lab { display: grid; grid-template-columns: 1fr 1.05fr; gap: 64px; align-items: start; }
   .lab p { color: var(--muted); font-weight: 300; }
   .lab p + p { margin-top: 15px; }
   .lab strong { color: var(--ink); font-weight: 600; }
+  .lab .labcaps { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 30px; margin: 32px 0 8px; }
+  .lab .labcaps .over { display: block; margin-bottom: 7px; }
+  .lab .labcaps p { font-size: .92rem; line-height: 1.6; }
   .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 28px; }
   .chip { border: 1px solid var(--hair); border-radius: 999px; padding: 6px 15px; font-size: .84rem; font-weight: 500; color: var(--muted); transition: border-color .2s, color .2s; }
   .chip:hover { border-color: var(--orange); color: var(--ink); }
@@ -226,6 +229,7 @@
     .hero .wrap { grid-template-columns: 1fr; gap: 48px; }
     .portrait { order: -1; }
     .lab { grid-template-columns: 1fr; gap: 40px; }
+    .lab .labcaps { grid-template-columns: 1fr; gap: 18px; }
     .skills { grid-template-columns: 1fr; gap: 36px; }
     .projects { grid-template-columns: 1fr; }
     .side { grid-template-columns: repeat(2, 1fr); }
@@ -350,7 +354,7 @@
             <h3>Materiel.net</h3>
             <ul>
               <li>Réalisation de l'ensemble des prestations techniques de la boutique, sur tous types de machines de particuliers</li>
-              <li>Diagnostic, réparation et remplacement de pièces — jusqu'au niveau des composants (micro-soudure)</li>
+              <li>Diagnostic, réparation et remplacement de pièces et de composants internes</li>
               <li>Montage et maintenance de matériel informatique</li>
             </ul>
           </div>
@@ -398,34 +402,48 @@
       <div class="shead"><span class="over"><span class="n">03</span>Infrastructure</span><h2>Mon homelab</h2></div>
       <div class="lab">
         <div class="reveal r-left">
-          <p>Mon terrain d'entraînement : une infrastructure auto-hébergée que je conçois, sécurise et fais évoluer depuis 2024.</p>
-          <p>Tout le trafic passe par un pare-feu pfSense, l'accès à distance se fait uniquement via VPN WireGuard, et les services tournent dans des VM Proxmox et des conteneurs Docker, publiés derrière un reverse proxy Nginx.</p>
-          <p><strong>Ce site lui-même est hébergé dessus.</strong></p>
+          <p>Mon terrain d'entraînement : une infrastructure auto-hébergée que je conçois, sécurise et fais évoluer en continu depuis 2024 — une dizaine de machines virtuelles et plusieurs services en production.</p>
+          <p>Tout le trafic passe par un pare-feu pfSense (segmentation en VLAN), l'accès à distance se fait uniquement par VPN WireGuard, et les services tournent dans des VM Proxmox et des conteneurs Docker, publiés en HTTPS derrière un reverse proxy Nginx.</p>
+          <p><strong>Ce site lui-même y est hébergé</strong>, et se met à jour tout seul à chaque push sur GitHub.</p>
+
+          <div class="labcaps">
+            <div><span class="over">Réseau &amp; sécurité</span><p>Pare-feu pfSense, segmentation VLAN, accès distant chiffré WireGuard, certificats HTTPS Let's Encrypt renouvelés automatiquement.</p></div>
+            <div><span class="over">Virtualisation</span><p>Cluster Proxmox VE : VM Debian provisionnées depuis une image « golden » réutilisable, et conteneurs Docker.</p></div>
+            <div><span class="over">Services en production</span><p>Portfolio, plateforme interne du BDE (FastAPI + React), bot Discord, dashboard scolaire MyGES, suivi de candidatures — chacun isolé sur sa VM, en service systemd.</p></div>
+            <div><span class="over">Exposition</span><p>Nginx Proxy Manager publie chaque service sur son sous-domaine (Force SSL, redirection HTTP→HTTPS, certificats auto).</p></div>
+            <div><span class="over">CI / CD</span><p>Déploiement continu : un push GitHub déclenche un runner Actions auto-hébergé qui déploie et redémarre le service, sans intervention.</p></div>
+            <div><span class="over">Apps &amp; PWA</span><p>Applications web installables avec notifications Web Push, cache hors-ligne et tâches de fond planifiées.</p></div>
+          </div>
+
           <div class="chips">
-            <span class="chip">pfSense</span><span class="chip">WireGuard</span><span class="chip">Proxmox VE</span>
-            <span class="chip">Docker</span><span class="chip">Nginx Proxy Manager</span><span class="chip">Debian</span>
+            <span class="chip">pfSense</span><span class="chip">VLAN</span><span class="chip">WireGuard</span><span class="chip">Proxmox VE</span>
+            <span class="chip">Docker</span><span class="chip">Nginx Proxy Manager</span><span class="chip">Let's Encrypt</span>
+            <span class="chip">GitHub Actions CI/CD</span><span class="chip">systemd</span><span class="chip">FastAPI</span><span class="chip">Debian</span>
           </div>
         </div>
-        <div class="diagram reveal r-right" data-parallax="-0.05" role="img" aria-label="Schéma : Internet vers pare-feu pfSense avec VPN WireGuard, reverse proxy Nginx, puis Proxmox hébergeant Portfolio, Site BDE et Docker">
-          <svg viewBox="0 0 440 330">
+        <div class="diagram reveal r-right" data-parallax="-0.05" role="img" aria-label="Schéma : Internet vers pare-feu pfSense (VPN WireGuard, VLAN), reverse proxy Nginx, puis cluster Proxmox hébergeant Portfolio, Site BDE, Bot Discord, Dashboard MyGES, Suivi alternance et Docker">
+          <svg viewBox="0 0 440 380">
             <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#111214"/></marker></defs>
             <g font-size="13.5" font-weight="600" text-anchor="middle" fill="#111214">
               <rect x="150" y="8" width="140" height="38" rx="19" fill="#fff" stroke="#d7d7d8" stroke-width="1.5"/>
               <text x="220" y="32">Internet</text>
               <line x1="220" y1="46" x2="220" y2="74" stroke="#111214" stroke-width="1.5" marker-end="url(#arr)"/>
               <rect x="110" y="76" width="220" height="46" rx="12" fill="#ff4316"/>
-              <text x="220" y="98" fill="#fff">pfSense</text>
-              <text x="220" y="114" font-size="10.5" fill="#fff">pare-feu · VPN WireGuard</text>
+              <text x="220" y="97" fill="#fff">pfSense</text>
+              <text x="220" y="113" font-size="10" fill="#fff">pare-feu · VPN WireGuard · VLAN</text>
               <line x1="220" y1="122" x2="220" y2="150" stroke="#111214" stroke-width="1.5" marker-end="url(#arr)"/>
               <rect x="128" y="152" width="184" height="40" rx="12" fill="#bbfaed"/>
               <text x="220" y="177">Reverse proxy Nginx</text>
               <line x1="220" y1="192" x2="220" y2="218" stroke="#111214" stroke-width="1.5" marker-end="url(#arr)"/>
-              <rect x="20" y="220" width="400" height="98" rx="14" fill="#fff" stroke="#d7d7d8" stroke-width="1.5" stroke-dasharray="5 5"/>
-              <text x="220" y="242" font-size="11" fill="#9a9ba1">PROXMOX VE</text>
-              <g font-size="12">
-                <rect x="40" y="256" width="104" height="44" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="92" y="283">Portfolio</text>
-                <rect x="168" y="256" width="104" height="44" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="220" y="283">Site BDE</text>
-                <rect x="296" y="256" width="104" height="44" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="348" y="283">Docker</text>
+              <rect x="20" y="220" width="400" height="150" rx="14" fill="#fff" stroke="#d7d7d8" stroke-width="1.5" stroke-dasharray="5 5"/>
+              <text x="220" y="241" font-size="11" fill="#9a9ba1">PROXMOX VE · services isolés en VM</text>
+              <g font-size="11.5">
+                <rect x="40" y="250" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="92" y="276">Portfolio</text>
+                <rect x="168" y="250" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="220" y="276">Site BDE</text>
+                <rect x="296" y="250" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="348" y="276">Bot Discord</text>
+                <rect x="40" y="304" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="92" y="330">MyGES</text>
+                <rect x="168" y="304" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="220" y="330">Alternance</text>
+                <rect x="296" y="304" width="104" height="42" rx="10" fill="#f1fdfa" stroke="#bbfaed" stroke-width="1.5"/><text x="348" y="330">Docker</text>
               </g>
             </g>
           </svg>
